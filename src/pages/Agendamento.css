@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+.agendamento-container {
+  background-color: #fff;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #B07B74;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 2rem;
+  color: #B07B74;
+}
+
+.subtitulo {
+  font-size: 1.4rem;
+  margin: 2rem 0 1rem;
+  color: #a96c65;
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.react-calendar {
+  background-color: #fff0f3;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Playfair Display', serif;
+  color: #B07B74;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+}
+
+.react-calendar__tile--active {
+  background-color: #B07B74 !important;
+  color: white !important;
+  border-radius: 10px;
+}
+
+.react-calendar__tile {
+  border-radius: 10px;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.botao-horario {
+  background-color: #B07B74;
+  color: white;
+  border: none;
+  padding: 0.6rem 0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Playfair Display', serif;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.botao-horario:hover {
+  background-color: #a46660;
+}
+.finalizar-btn {
+  margin-top: 3rem;
+  background-color: #B07B74;
+  color: white;
+  font-family: 'Playfair Display', serif;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.finalizar-btn:hover {
+  background-color: #a06660;
+}
+
+.botao-horario.selecionado {
+  background-color: #B07B74;
+  color: #fff;
+}

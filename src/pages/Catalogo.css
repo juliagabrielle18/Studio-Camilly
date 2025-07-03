@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+.catalogo-container {
+  background-color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #B07B74;
+  min-height: 100vh;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 3rem;
+  color: #B07B74;
+}
+
+.carousel {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.carousel-item {
+  padding: 0 10px;
+  display: flex !important;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+}
+
+.card {
+  background-color: #fff0f3;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.2rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #B07B74;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #6f4d4d;
+  margin-bottom: 1rem;
+}
+
+.botao-agendar {
+  background-color: #B07B74;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+  font-family: 'Playfair Display', serif;
+  display: inline-block;
+  margin-top: auto;
+}
+
+.botao-agendar:hover {
+  background-color: #a66b65;
+}

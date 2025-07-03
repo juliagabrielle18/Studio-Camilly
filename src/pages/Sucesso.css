@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+.sucesso-container {
+  min-height: 100vh;
+  background-color: #fff0f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.sucesso-card {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  padding: 3rem;
+  max-width: 500px;
+  font-family: 'Playfair Display', serif;
+  color: #B07B74;
+}
+
+.sucesso-card h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.sucesso-card p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #8a5a55;
+}
+
+.botao-voltar {
+  background-color: #B07B74;
+  color: white;
+  text-decoration: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.botao-voltar:hover {
+  background-color: #a46963;
+}

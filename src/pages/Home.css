@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+.home-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 100px;
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.text-section {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.studio-title {
+  font-size: 48px;
+  color: #c59c8f; /* tom rosa sofisticado da imagem */
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #5a5a5a;
+  margin-bottom: 30px;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.home-btn {
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.filled {
+  background-color: #c59c8f;
+  color: white;
+  border: none;
+}
+
+.filled:hover {
+  background-color: #b88a7b;
+}
+
+.outlined {
+  border: 2px solid #c59c8f;
+  color: #c59c8f;
+  background: transparent;
+}
+
+.outlined:hover {
+  background-color: #fceeee;
+}
+
+.image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.image-section img {
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
