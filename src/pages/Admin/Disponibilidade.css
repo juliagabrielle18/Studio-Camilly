@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap');
+
+.disponibilidade-container {
+  padding: 2rem 1rem;
+  font-family: 'Playfair Display', serif;
+  background-color: #fff0f3;
+  min-height: 100vh;
+  color: #B07B74;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titulo {
+  font-size: 2.3rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: #c59c8f;
+}
+
+.subtitulo {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #a96c6c;
+}
+
+/* ==== Lista de Dias (semana atual) ==== */
+.dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.dias-semana::-webkit-scrollbar {
+  display: none;
+}
+
+.dia-card {
+  flex: 0 0 auto;
+  background-color: #fff;
+  border: 2px solid #f3cdd3;
+  border-radius: 16px;
+  padding: 0.8rem 1rem;
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.dia-card.selecionado {
+  background-color: #B07B74;
+  color: white;
+  border: none;
+}
+
+.dia-card .dia-nome {
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+  text-transform: capitalize;
+}
+
+.dia-card .dia-numero {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* === Botões de período: manhã, tarde, noite === */
+.periodos {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.periodo-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  background-color: #fff;
+  border: 2px solid #f3cdd3;
+  color: #B07B74;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  transition: all 0.3s ease;
+}
+
+.periodo-btn:hover {
+  background-color: #fce2e7;
+}
+
+.periodo-btn.ativo {
+  background-color: #B07B74;
+  color: white;
+  border: none;
+}
+
+/* === Botão SALVAR === */
+.btn-salvar {
+  background-color: #c59c8f;
+  color: white;
+  font-size: 1rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  margin-top: 2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.3s ease;
+}
+
+.btn-salvar:hover {
+  background-color: #b88a7b;
+}
+
+.horarios-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.botao-horario {
+  background-color: #fce2e7;
+  color: #B07B74;
+  border: 2px solid #f3cdd3;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.botao-horario:hover {
+  background-color: #f8cfd6;
+}
+
+.botao-horario.selecionado {
+  background-color: #B07B74;
+  color: white;
+  border: none;
+}
+
+/* ==== Botão salvar ==== */
+.salvar-btn {
+  background-color: #c59c8f;
+  color: white;
+  font-size: 1rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  margin-top: 2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.3s ease;
+}
+
+.salvar-btn:hover {
+  background-color: #b88a7b;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .titulo {
+    font-size: 1.9rem;
+  }
+
+  .subtitulo {
+    font-size: 1.05rem;
+  }
+
+  .dia-card {
+    width: 70px;
+    padding: 0.6rem;
+  }
+
+  .botao-horario {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .salvar-btn {
+    width: 90%;
+    font-size: 1rem;
+  }
+}
+.voltar-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c59c8f;
+  transition: transform 0.2s;
+}
+
+.voltar-btn:hover {
+  transform: scale(1.1);
+}

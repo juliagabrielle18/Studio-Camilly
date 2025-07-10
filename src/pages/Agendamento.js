@@ -1,45 +1,152 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import { collection, addDoc, Timestamp, getDoc, doc } from 'firebase/firestore';
+import { db } from '../Backend/firebase';
+
 import './Agendamento.css';
 
 export default function Agendamento() {
-  const [date, setDate] = useState(new Date());
-  const [horarioSelecionado, setHorarioSelecionado] = useState(null);
-  const horarios = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+  const [disponibilidades, setDisponibilidades] = useState({});
+  const [diasSemana, setDiasSemana] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [nomeCliente, setNomeCliente] = useState('');
+  const [telefoneCliente, setTelefoneCliente] = useState('');
   const navigate = useNavigate();
 
-  const handleFinalizar = () => {
-    navigate('/sucesso'); // Redireciona para a rota de sucesso
+  useEffect(() => {
+    const hoje = new Date();
+    const diaSemana = hoje.getDay();
+    const distanciaSegunda = (diaSemana === 0 ? -6 : 1) - diaSemana;
+    const segunda = new Date();
+    segunda.setDate(hoje.getDate() + distanciaSegunda);
+
+    const novaSemana = Array.from({ length: 7 }, (_, i) => {
+      const dia = new Date(segunda);
+      dia.setDate(segunda.getDate() + i);
+      return dia;
+    });
+    setDiasSemana(novaSemana);
+
+    const carregarDisponibilidades = async () => {
+      try {
+        const docRef = doc(db, 'configuracoes', 'disponibilidadesSemana');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setDisponibilidades(docSnap.data());
+        } else {
+          console.warn('Documento de disponibilidade não encontrado.');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar disponibilidades:', error);
+      }
+    };
+
+    carregarDisponibilidades();
+  }, []);
+
+  const horariosDoDia = selectedDay
+    ? disponibilidades[selectedDay.toISOString().split('T')[0]] || []
+    : [];
+
+  const handleFinalizar = async () => {
+    if (selectedDay && selectedTime && nomeCliente.trim() && telefoneCliente.trim()) {
+      const agendamento = {
+        cliente: nomeCliente,
+        telefone: telefoneCliente,
+        data: selectedDay.toLocaleDateString('pt-BR'),
+        horario: selectedTime,
+        imagem: localStorage.getItem('imagemUnhaSelecionada'),
+        novo: true,
+        criadoEm: Timestamp.now(),
+      };
+
+      try {
+        await addDoc(collection(db, 'agendamentos'), agendamento);
+        navigate('/sucesso');
+      } catch (error) {
+        console.error('Erro ao salvar agendamento:', error);
+        alert('Erro ao agendar. Tente novamente.');
+      }
+    }
   };
 
   return (
-    <div className="agendamento-container">
-      <h1 className="titulo">Agende seu horário</h1>
+    <div className="agendamento-novo-container">
+      {/* Setinha no topo */}
+<button
+  onClick={() => navigate('/catalogo')}
+  className="seta-voltar"
+>
+  ← 
+</button>
 
-      <div className="calendar-wrapper">
-        <Calendar onChange={setDate} value={date} />
+
+      <h1 className="titulo">Escolha sua data e horário</h1>
+
+      <div className="dias-horizontal">
+        {diasSemana.map((data, index) => {
+          const dataStr = data.toISOString().split('T')[0];
+          const horariosDia = disponibilidades[dataStr] || [];
+          const estaDisponivel = horariosDia.length > 0;
+
+          return (
+            <div
+              key={index}
+              className={`dia ${selectedDay?.toDateString() === data.toDateString() ? 'ativo' : ''} ${!estaDisponivel ? 'indisponivel' : ''}`}
+              onClick={() => estaDisponivel && setSelectedDay(data)}
+            >
+              <span className="semana">
+                {data.toLocaleDateString('pt-BR', { weekday: 'short' })}
+              </span>
+              <span className="data">{data.getDate()}</span>
+            </div>
+          );
+        })}
       </div>
 
       <h2 className="subtitulo">Horários disponíveis</h2>
-      <div className="horarios-grid">
-        {horarios.map((hora, index) => (
-          <button
-            key={index}
-            className={`botao-horario ${horarioSelecionado === hora ? 'selecionado' : ''}`}
-            onClick={() => setHorarioSelecionado(hora)}
-          >
-            {hora}
-          </button>
-        ))}
+      <div className="horarios-wrapper">
+        {horariosDoDia.length > 0 ? (
+          horariosDoDia.map((hora, i) => (
+            <button
+              key={i}
+              className={`botao-horario ${selectedTime === hora ? 'selecionado' : ''}`}
+              onClick={() => setSelectedTime(hora)}
+            >
+              {hora}
+            </button>
+          ))
+        ) : (
+          <p className="nenhum-horario">Nenhum horário disponível</p>
+        )}
       </div>
 
-      {horarioSelecionado && (
-        <button className="finalizar-btn" onClick={handleFinalizar}>
-          Finalizar Agendamento
-        </button>
-      )}
+      <h2 className="subtitulo">Seus dados</h2>
+      <div className="inputs-linha">
+        <input
+          type="text"
+          className="input-campo"
+          placeholder="Digite seu nome"
+          value={nomeCliente}
+          onChange={(e) => setNomeCliente(e.target.value)}
+        />
+        <input
+          type="tel"
+          className="input-campo"
+          placeholder="Digite seu telefone"
+          value={telefoneCliente}
+          onChange={(e) => setTelefoneCliente(e.target.value)}
+        />
+      </div>
+
+      <div className="botao-wrapper">
+        {selectedTime && selectedDay && nomeCliente.trim() && telefoneCliente.trim() && (
+          <button className="btn-book" onClick={handleFinalizar}>
+            Confirmar Agendamento
+          </button>
+        )}
+      </div>
     </div>
   );
 }
