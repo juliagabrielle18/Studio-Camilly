@@ -207,3 +207,8 @@
 .voltar-btn:hover {
   transform: scale(1.1);
 }
+.remover-horario {
+  margin-left: 6px;
+  color: #c59c8f;
+  font-weight: bold;
+}

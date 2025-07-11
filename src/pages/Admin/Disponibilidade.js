@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../Backend/firebase';
 import { ArrowLeft } from 'lucide-react';
 import './Disponibilidade.css';
@@ -20,18 +20,27 @@ export default function Disponibilidade() {
 
   useEffect(() => {
     const hoje = new Date();
-    const diaSemana = hoje.getDay();
-    const distanciaSegunda = (diaSemana === 0 ? -6 : 1) - diaSemana;
-    const segunda = new Date();
-    segunda.setDate(hoje.getDate() + distanciaSegunda);
-
     const novaSemana = Array.from({ length: 7 }, (_, i) => {
-      const dia = new Date(segunda);
-      dia.setDate(segunda.getDate() + i);
+      const dia = new Date(hoje);
+      dia.setDate(hoje.getDate() + i);
       return dia;
     });
-
     setSemana(novaSemana);
+
+    // Carregar dados salvos do Firestore
+    const carregarDisponibilidadesSalvas = async () => {
+      try {
+        const ref = doc(db, 'configuracoes', 'disponibilidadesSemana');
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          setDisponibilidades(snap.data());
+        }
+      } catch (error) {
+        console.error('Erro ao buscar disponibilidades:', error);
+      }
+    };
+
+    carregarDisponibilidadesSalvas();
   }, []);
 
   const formatarData = (data) => data.toISOString().split('T')[0];
@@ -44,7 +53,7 @@ export default function Disponibilidade() {
       ? horariosAtuais.filter((h) => h !== hora)
       : [...horariosAtuais, hora];
 
-    setDisponibilidades({ ...disponibilidades, [chave]: atualizados });
+    setDisponibilidades((prev) => ({ ...prev, [chave]: atualizados }));
   };
 
   const salvarDisponibilidades = async () => {
@@ -69,14 +78,15 @@ export default function Disponibilidade() {
       <div className="dias-semana">
         {semana.map((data, index) => {
           const ativo = diaSelecionado && formatarData(diaSelecionado) === formatarData(data);
-
           return (
             <div
               key={index}
               className={`dia ${ativo ? 'ativo' : ''}`}
               onClick={() => setDiaSelecionado(data)}
             >
-              <span className="semana">{data.toLocaleDateString('pt-BR', { weekday: 'short' })}</span>
+              <span className="semana">
+                {data.toLocaleDateString('pt-BR', { weekday: 'short' })}
+              </span>
               <span className="data">{data.getDate()}</span>
             </div>
           );
@@ -108,6 +118,7 @@ export default function Disponibilidade() {
                   onClick={() => toggleHorario(diaSelecionado, hora)}
                 >
                   {hora}
+                  {selecionado && <span className="remover-horario">✖</span>}
                 </button>
               );
             })}

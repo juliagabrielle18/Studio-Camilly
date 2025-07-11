@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, Timestamp, getDoc, doc } from 'firebase/firestore';
 import { db } from '../Backend/firebase';
-
+import { enviarEmailParaCamilly } from '../Email';  // Importa a função de envio de email
 import './Agendamento.css';
 
 export default function Agendamento() {
@@ -16,17 +16,15 @@ export default function Agendamento() {
 
   useEffect(() => {
     const hoje = new Date();
-    const diaSemana = hoje.getDay();
-    const distanciaSegunda = (diaSemana === 0 ? -6 : 1) - diaSemana;
-    const segunda = new Date();
-    segunda.setDate(hoje.getDate() + distanciaSegunda);
+    hoje.setHours(0, 0, 0, 0);
 
-    const novaSemana = Array.from({ length: 7 }, (_, i) => {
-      const dia = new Date(segunda);
-      dia.setDate(segunda.getDate() + i);
+    // Mostrar apenas os próximos 7 dias (incluindo hoje)
+    const proximosSeteDias = Array.from({ length: 7 }, (_, i) => {
+      const dia = new Date(hoje);
+      dia.setDate(hoje.getDate() + i);
       return dia;
     });
-    setDiasSemana(novaSemana);
+    setDiasSemana(proximosSeteDias);
 
     const carregarDisponibilidades = async () => {
       try {
@@ -62,10 +60,16 @@ export default function Agendamento() {
       };
 
       try {
+        // Salvar no Firestore
         await addDoc(collection(db, 'agendamentos'), agendamento);
+
+        // Enviar email para a Camilly
+        await enviarEmailParaCamilly(agendamento);
+
+        // Navegar para página de sucesso
         navigate('/sucesso');
       } catch (error) {
-        console.error('Erro ao salvar agendamento:', error);
+        console.error('Erro ao salvar agendamento ou enviar email:', error);
         alert('Erro ao agendar. Tente novamente.');
       }
     }
@@ -73,14 +77,9 @@ export default function Agendamento() {
 
   return (
     <div className="agendamento-novo-container">
-      {/* Setinha no topo */}
-<button
-  onClick={() => navigate('/catalogo')}
-  className="seta-voltar"
->
-  ← 
-</button>
-
+      <button onClick={() => navigate('/catalogo')} className="seta-voltar">
+        ←
+      </button>
 
       <h1 className="titulo">Escolha sua data e horário</h1>
 
@@ -93,12 +92,12 @@ export default function Agendamento() {
           return (
             <div
               key={index}
-              className={`dia ${selectedDay?.toDateString() === data.toDateString() ? 'ativo' : ''} ${!estaDisponivel ? 'indisponivel' : ''}`}
+              className={`dia ${selectedDay?.toDateString() === data.toDateString() ? 'ativo' : ''} ${
+                !estaDisponivel ? 'indisponivel' : ''
+              }`}
               onClick={() => estaDisponivel && setSelectedDay(data)}
             >
-              <span className="semana">
-                {data.toLocaleDateString('pt-BR', { weekday: 'short' })}
-              </span>
+              <span className="semana">{data.toLocaleDateString('pt-BR', { weekday: 'short' })}</span>
               <span className="data">{data.getDate()}</span>
             </div>
           );
